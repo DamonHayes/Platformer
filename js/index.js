@@ -13,6 +13,7 @@ var downKey;
 //create game vars
 var gameLoop;
 var player;
+var borders = [];
 
 window.onload = function() {
 	//assin canvas and context vars
@@ -27,6 +28,15 @@ window.onload = function() {
 	
 	//create player
 	player = new Player(50, canvasH - 100);
+	
+	//create borders
+	for (let i = 0; i < 6; i++) {
+		borders.push(new border(0 + 100* i, canvasH - 100, 100, 100, 1));
+	}
+	borders.push(new border(0, canvasH-200, 100, 100, 2));
+	for (let i = 0; i < 3; i++){
+		borders.push(new border(600, (canvasH - 300) + 100*i, 100, 100, 2));
+	}
 	
 	//start game loop
 	gameLoop = setInterval(step, 1000/30);
@@ -51,6 +61,11 @@ function draw() {
 
 	//draw the player
 	player.draw();
+	
+	//draw the borders
+	for (let i=0; i < borders.length; i++) {
+		borders[i].draw();
+	}
 }
 
 function setupInputs(){
@@ -76,4 +91,18 @@ function setupInputs(){
 			downKey = false;
 		}
 	});
+}
+
+function checkIntersection(r1, r2){
+	if (r1.x >= r2.x +  r2.width) {
+		return false;
+	} else if (r1.x + r1.width <= r2.x) {
+		return false;
+	} else if (r1.y >= r2.y + r2.height) {
+		return false;
+	} else if (r1.y + r1.height <= r2.y) {
+		return false;
+	} else{
+		return true;
+	}
 }
